@@ -8,7 +8,7 @@ This repository contains **no application code yet** — only the `docs/` docume
 
 `git` is initialized on branch `main`, with `origin` at https://github.com/boonthepkstl-alt/my-coffee-store.git. `docs/` is opened as an Obsidian vault.
 
-`.obsidian/` is **tracked**, including `workspace.json` — Obsidian rewrites that file as panes and cursor positions change, so it will often show as modified without anyone having edited the project. Leave it out of unrelated commits (or gitignore it); a dirty tree here usually means nothing.
+`.obsidian/` settings (`app`, `appearance`, `core-plugins`) are **tracked** so the vault config is shared. `workspace.json` is **gitignored and untracked** — Obsidian rewrites it as panes and cursor positions change, which made the tree look dirty with no real change. Keep it that way; don't re-add it.
 
 Consequently there are **no build, lint, or test commands to document**. When the first code lands, add the real commands to this file rather than assuming a stack.
 
