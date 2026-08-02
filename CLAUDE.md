@@ -6,7 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This repository contains **no application code yet** — only the `docs/` documentation scaffold described below, plus a stub `README.md`. There is no package manifest, build tooling, or test runner.
 
-`git` is initialized on branch `main`, with `origin` at https://github.com/boonthepkstl-alt/my-coffee-store.git. `docs/` is opened as an Obsidian vault (`.obsidian/` holds editor-local workspace settings).
+`git` is initialized on branch `main`, with `origin` at https://github.com/boonthepkstl-alt/my-coffee-store.git. `docs/` is opened as an Obsidian vault.
+
+`.obsidian/` is **tracked**, including `workspace.json` — Obsidian rewrites that file as panes and cursor positions change, so it will often show as modified without anyone having edited the project. Leave it out of unrelated commits (or gitignore it); a dirty tree here usually means nothing.
 
 Consequently there are **no build, lint, or test commands to document**. When the first code lands, add the real commands to this file rather than assuming a stack.
 
@@ -29,6 +31,8 @@ Consequently there are **no build, lint, or test commands to document**. When th
 - **`04-retrospectives`** draws its evidence from `03-testing/02-test-result` and `05-log`.
 
 Each `index.md` states its own inputs and outputs at the bottom. Read the relevant `index.md` before adding a document to a folder — it defines what belongs there.
+
+**The pipeline is currently empty scaffolding.** All 14 files under `docs/` are `index.md` folder descriptions and nothing else — there are no actual requirements, plans, tasks, designs, test cases, results, or log entries yet. Nothing defines what "my-coffee-store" is or does. Don't go looking for a spec to implement against; if asked to build something, the requirement has to be established first (and belongs in `docs/01-requirements/01-spec/`).
 
 ### Conventions to follow when writing docs
 
