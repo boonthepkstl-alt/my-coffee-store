@@ -1,0 +1,6 @@
+# Obsidian workspace layout — rewritten as panes, cursors, and scroll
+# positions change, so it churns without the project actually changing.
+# The rest of .obsidian/ (app, appearance, core-plugins) stays tracked
+# so vault settings are shared.
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
