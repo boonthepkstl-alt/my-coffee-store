@@ -10,7 +10,7 @@ This repository contains **no application code yet** — only the `docs/` docume
 
 `.obsidian/` settings (`app`, `appearance`, `core-plugins`) are **tracked** so the vault config is shared. `workspace.json` is **gitignored and untracked** — Obsidian rewrites it as panes and cursor positions change, which made the tree look dirty with no real change. Keep it that way; don't re-add it.
 
-Consequently there are **no build, lint, or test commands to document**. When the first code lands, add the real commands to this file rather than assuming a stack.
+**The stack is decided but not yet scaffolded.** [ADR-01](docs/02-design/02-technical/20260802-01-adr-platform-stack.md) (`ยอมรับแล้ว`, 2026-08-02) settles TypeScript on Next.js, a long-running Node runtime (not serverless — the order-to-barista-screen path needs a held-open WebSocket), PostgreSQL, and a Thailand-based VPS. No `npm create next-app` has been run yet, so there is still no `package.json` and still no real build/lint/test command to give. Once the project is scaffolded, replace this paragraph with the actual commands — do not assume a stack beyond what ADR-01 states, and do not invent commands before the scaffold exists.
 
 ## `docs/` — the documentation system
 
@@ -32,7 +32,7 @@ Consequently there are **no build, lint, or test commands to document**. When th
 
 Each `index.md` states its own inputs and outputs at the bottom. Read the relevant `index.md` before adding a document to a folder — it defines what belongs there.
 
-**The pipeline is currently empty scaffolding.** All 14 files under `docs/` are `index.md` folder descriptions and nothing else — there are no actual requirements, plans, tasks, designs, test cases, results, or log entries yet. Nothing defines what "my-coffee-store" is or does. Don't go looking for a spec to implement against; if asked to build something, the requirement has to be established first (and belongs in `docs/01-requirements/01-spec/`).
+**The pipeline is no longer empty, but coverage is uneven.** `docs/01-requirements/01-spec/` holds three specs (table self-ordering, PDPA/IT law, cookie consent — all `status: ร่าง`, all with open questions in their own section 8) plus `docs/01-requirements/backlog.md` with 17 items. `docs/02-design/02-technical/` holds one accepted ADR (the stack). `01-requirements/02-plan`, `03-task`, `02-design/01-prototypes`, all of `03-testing`, `04-retrospectives`, and `00-archived` are still just `index.md`. Don't assume a folder is populated — check it — and don't treat a `ร่าง` spec's open questions as settled.
 
 ### Conventions to follow when writing docs
 
