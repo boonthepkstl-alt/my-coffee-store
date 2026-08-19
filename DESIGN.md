@@ -34,17 +34,54 @@ Consequently, almost every visual token in this document is `TBD`. That is the c
 
 `TBD` — no logo file, mark, or usage guideline exists in the repository.
 
-### Brand Colors
+### Brand Colors — decided 2026-08-19 (first pass; see note)
 
-`TBD` — no color has been defined in code, in a spec, or in any design asset. There is nothing to map to; a semantic token list is proposed in §2 below with every value left blank rather than guessed.
+> **This is a working decision, not a brand-owner-approved identity.** No one
+> claiming ownership of "my-coffee-store" as a brand has weighed in — there is
+> still no logo, no company beyond the repo name. This palette exists so that
+> UI work can proceed without inventing colors ad hoc per screen (the failure
+> mode Rule 1 exists to prevent); treat it the way ADR-01 was treated before
+> acceptance — usable now, but open to being overridden by whoever actually
+> owns the shop's branding.
+
+Grounded in the one real constraint already on record (§ Visual Direction
+below): legible under glare, fast to read one-handed, calm rather than
+decorative. A warm, coffee-derived palette rather than a generic SaaS blue —
+this is a food-service counter tool, not enterprise software.
+
+| Token | Hex | Use |
+| --- | --- | --- |
+| `color.primary` | `#6F4E37` | Primary actions — confirm order, save menu edit |
+| `color.secondary` | `#C8A27A` | Secondary emphasis, selected states |
+| `color.accent` | `#E08D3C` | Sparingly — highlights, active tab indicator |
+| `color.background` | `#FAF6F0` | Page background — warm off-white, not stark white |
+| `color.surface` | `#FFFFFF` | Cards, table rows, modals sitting on background |
+| `color.text.primary` | `#2B211B` | Body text — warm near-black, not pure `#000` |
+| `color.text.secondary` | `#6B5D54` | Secondary/muted text, captions |
+| `color.border` | `#E4DDD3` | Dividers, table borders, input outlines |
+| `color.success` | `#2E7D32` | Payment succeeded, order confirmed |
+| `color.warning` | `#B45309` | Sold-out-mid-selection, non-blocking caution |
+| `color.error` | `#C62828` | Payment failed, permission denied (Alert, §3) |
+| `color.info` | `#1D6FA5` | Neutral informational messages |
+
+Deliberately kept `warning` and `accent` visually distinct (amber-brown vs.
+orange) — accent is decorative, warning is a signal; conflating them would
+make a caution message look like a stylistic choice.
 
 ### Iconography
 
-`TBD` — no icon library, style, or sizing rule has been chosen.
+`TBD` — no icon library, style, or sizing rule has been chosen. Colors above
+don't imply an icon set; leave this open rather than guessing one to match.
 
 ### Visual Direction
 
-`TBD`. The closest thing to a direction signal in the specs is functional, not aesthetic: the ordering flow must be fast and legible for a customer standing at a table on their own phone (§1 of `20260802-01`), and the barista screen must be scannable at a glance under time pressure (US-5, `20260802-01`). That implies a **legible, low-friction, high-contrast-under-glare** direction rather than a decorative one — but this is an inference from functional requirements, not a decided design language, and should be validated with whoever owns the brand before being treated as settled.
+Confirmed direction, same reasoning as before now with color applied: the
+ordering flow must be fast and legible for a customer standing at a table on
+their own phone (§1 of `20260802-01`), and the barista screen must be
+scannable at a glance under time pressure (US-5, `20260802-01`). **Legible,
+low-friction, high-contrast-under-glare, calm rather than decorative** — still
+worth validating with whoever ends up owning the brand, but no longer purely
+an inference with nothing built on it.
 
 ---
 
@@ -52,28 +89,58 @@ Consequently, almost every visual token in this document is `TBD`. That is the c
 
 No token in this section has a real value yet. The table below exists so that **when values are decided, they land in one place** rather than being invented ad hoc per component.
 
-### Colors
+### Colors — decided 2026-08-19, see §1 Brand Colors for the full reasoning
 
 ```text
-color.primary          TBD
-color.secondary        TBD
-color.accent           TBD
-color.background       TBD
-color.surface          TBD
-color.text.primary     TBD
-color.text.secondary   TBD
-color.border           TBD
-color.success          TBD
-color.warning          TBD
-color.error            TBD
-color.info             TBD
+color.primary          #6F4E37
+color.secondary        #C8A27A
+color.accent           #E08D3C
+color.background       #FAF6F0
+color.surface          #FFFFFF
+color.text.primary     #2B211B
+color.text.secondary   #6B5D54
+color.border           #E4DDD3
+color.success          #2E7D32
+color.warning          #B45309
+color.error            #C62828
+color.info             #1D6FA5
 ```
 
-No CSS variables exist to map these to — there is no CSS file in the repo. When the styling approach is chosen (§0), these tokens should be defined there first, not invented inline in a component.
+No CSS variables exist to map these to yet — there is still no CSS file in the
+repo (no styling framework decided, §0). When one is chosen, define these as
+real CSS custom properties (`--color-primary`, etc.) there first — this table
+is the source of truth for the *values*, not a substitute for wiring them in.
 
-### Typography
+### Typography — decided 2026-08-19
 
-`TBD` in full — font family, fallback stack, and every scale step (heading/body/label/caption/button/table/form) with size, weight, line-height, and letter-spacing. Nothing in the specs implies a typeface. One functional constraint worth carrying forward once type is chosen: the customer menu is read on a phone screen in a coffee shop (variable lighting, one-handed use), so body text and price figures need to stay legible at typical mobile viewing distance — a constraint on the *scale*, not a font choice.
+**UI language is still not formally confirmed** (§1 flags this as an open
+gap) — but every spec and every screen designed so far is Thai, and the
+customer is a walk-in at a Thai shop, so the typeface must render Thai well
+regardless of how that question resolves. Chosen with that in mind, not as a
+decision that Thai has been locked in.
+
+| Token | Value |
+| --- | --- |
+| Font family | `Sarabun` |
+| Fallback | `"Noto Sans Thai", "Segoe UI", sans-serif` |
+| Source | Google Fonts (`fonts.googleapis.com`) — widely used for Thai UI, full Thai + Latin coverage, legible at small sizes |
+
+| Style | Size | Weight | Line height | Letter spacing |
+| --- | --- | --- | --- | --- |
+| Heading (h1) | 28px | 600 | 1.3 | normal |
+| Heading (h2) | 22px | 600 | 1.35 | normal |
+| Body | 16px | 400 | 1.5 | normal |
+| Label | 14px | 500 | 1.4 | normal |
+| Caption | 12px | 400 | 1.4 | 0.01em |
+| Button | 16px | 600 | 1 | 0.01em |
+| Table | 15px | 400 | 1.4 | normal |
+| Form (input text) | 16px | 400 | 1.4 | normal |
+
+16px is the floor everywhere text carries meaning (body, button, form,
+barista queue) — the functional constraint already on record (mobile,
+variable lighting, one-handed use, glance-under-pressure) argues against
+anything smaller for content a customer or barista actually reads to act on.
+Caption is the one deliberate exception, for secondary/de-emphasized text only.
 
 ### Spacing
 
@@ -174,7 +241,32 @@ This isn't "Table for staff, Card for customers" — both examples above are sta
 - **Empty State** — **Required implicitly** (e.g., barista queue with no pending orders; menu list before staff adds items) but no pattern designed. `TBD`.
 - **Error State** — **Required**, and partially specified at the behavior level (not visual) in `20260802-01` §7 — see the table in §4 below. The visual treatment of each is `TBD`.
 - **Success State** — **Required implicitly** (payment succeeded, order sent) but no pattern designed.
-- **Permission State** — **Required** — BL-006 establishes distinct owner vs. staff roles, meaning some staff admin actions must be hidden or blocked for non-owner accounts. No "insufficient permission" UI pattern has been designed yet.
+- **Permission State — decided 2026-08-19, two layers, not a dedicated screen:**
+
+  1. **Preventive (default).** Hide or disable the control entirely for a role
+     that can't use it — don't render an "แก้ไข" button for non-owner staff at
+     all. This is the normal path for every permission boundary in this repo
+     (BL-006 owner vs. staff; PDPA BR-8 least-privilege access). It avoids a
+     confusing dead end where a user taps something only to be told no, and it
+     doesn't weaken AC-8/AC-9's "ระบบต้องปฏิเสธ" — the backend still rejects
+     the action regardless of what the UI shows, so hiding the control is a
+     UX improvement on top of the enforcement, not a replacement for it.
+  2. **Reactive (backstop).** If a denied action is attempted anyway — stale
+     UI state, direct navigation, a race between role change and page load —
+     the backend rejects it and the UI surfaces a lightweight inline **Alert**
+     at the point of the attempt (reuse the existing Alert component; do not
+     invent a new "Permission Denied" screen or Dialog for this). Message
+     states that the action needs a higher permission level; it does not
+     expose implementation or security detail.
+  3. **Always, regardless of which layer caught it:** log the attempt
+     server-side per PDPA BR-9/AC-9 (spec `20260802-02`) — this is a backend
+     requirement independent of what the UI displays, and applies whether the
+     control was hidden and someone reached the endpoint directly, or the
+     Alert fired.
+
+  A full-screen or modal "access denied" experience was considered and
+  rejected: it breaks flow for what should be a rare, recoverable event once
+  layer 1 is in place, and nothing in the specs asks for that much ceremony.
 - **Offline / Network Error** — **Required**, behavior fixed by `20260802-01` §7 ("มือถือลูกค้าไม่มีอินเทอร์เน็ต" → show a clear message, suggest ordering at the counter). Visual pattern `TBD`.
 
 ---
@@ -252,6 +344,9 @@ No mapping can be populated yet — there is no CSS variable, no component file,
 | Cookie consent: 3-category banner, reject-as-easy-as-accept, off-by-default | Legal requirement (PDPA), not a design preference — see `20260802-03` BR-1–5 | 2026-08-02 |
 | This document written mostly `TBD` rather than invented | No frontend code, brand, or visual asset exists to analyze; inventing values would misrepresent this as a settled system | 2026-08-02 |
 | Table vs Card: rule by data shape, not a single blanket pick — Table for uniform/admin rows (menu management, BL-001), Card for variable/glance-under-pressure content (barista queue, BL-005) | Two independent prototype audits (BL-001, BL-005) hit the identical undecided component — confirmed it was a system-level gap, not a per-feature one. A single fixed choice would have fit one screen and forced the other, since the barista queue's per-order content (multiple line items, options) doesn't sit in one table row the way a menu item does | 2026-08-19 |
+| Permission State: hide the control by default, Alert as backstop, no dedicated denial screen | AC-8/AC-9 require the system to reject an unauthorized attempt (and, for PDPA, log it) — they don't require a full denial UI. Hiding first avoids a confusing dead end; a screen or modal for a rare, recoverable event was considered and rejected as more ceremony than the requirement calls for | 2026-08-19 |
+| Brand Colors: warm coffee-derived palette (see §1) — first-pass, not brand-owner-approved | Requested UI mockups need real values per Rule 1 (don't invent silently); no brand owner has weighed in yet, so this is usable-now-not-final, the same posture ADR-01 had before acceptance | 2026-08-19 |
+| Typography: Sarabun + Noto Sans Thai fallback, 16px floor for anything read to act on | Every spec and screen so far is Thai though the UI-language question is still open; 16px floor follows directly from the mobile/glance-under-pressure constraints already on record, not a new assumption | 2026-08-19 |
 
 Update this table whenever a real design decision is made — including "we decided not to decide X yet."
 
