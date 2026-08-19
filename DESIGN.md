@@ -222,7 +222,20 @@ for the cookie banner, which this decision makes visually incorrect there —
 it should render as checkboxes; noted as a fix rather than silently left.
 - **Date Picker** — Not yet required by any current spec.
 - **Search** — Not yet required by any current spec.
-- **Validation** — `TBD` in full; no validation style, message pattern, or timing (on-blur vs. on-submit) has been specified anywhere.
+- **Validation** — `TBD` in general (style, message pattern, on-blur vs. on-submit timing — no spec addresses any of this). **One concrete instance decided 2026-08-19: menu price**, see below. Treat this as the first real answer to the general question, not a template stamped onto every future field — the next field validated should still be reasoned through, not copy-pasted from this one.
+
+  **Menu price rule (first-pass business policy, not spec-derived — revisable
+  like the Brand Colors decision):** nothing in `20260802-01` sets a price
+  format or bound; BR-4/AC-9 only govern *when* a price change takes effect,
+  not what values are valid. Decided:
+
+  | Rule | Value | Reasoning |
+  | --- | --- | --- |
+  | Currency | Thai Baht (฿), whole numbers only | Every price in every spec, mockup, and prior decision uses whole Baht (฿45, ฿55...); satang subdivision is essentially unused in Thai food retail |
+  | Minimum | Must be **greater than 0** | Not a style choice — a ฿0 item has nothing for BL-004's payment step to charge. This is a technical necessity the flow depends on, not a preference |
+  | Maximum | ฿2,000 (soft ceiling) | Generous enough for any real coffee-shop item; exists to catch a fat-finger entry (typing 4500 instead of 45), not to constrain legitimate pricing |
+  | Required | Name and price both required to save | A menu row with a blank price or name isn't a valid row to persist |
+  | Message timing | On submit (when "บันทึก" is pressed), not on every keystroke | Matches the rest of this screen's interaction — the sold-out Switch already acts without a submit step (§3), so the one field that *does* need a submit step should say so clearly rather than validating live like the Switch does |
 
 ### Data Display
 
@@ -365,6 +378,7 @@ No mapping can be populated yet — there is no CSS variable, no component file,
 | Brand Colors: warm coffee-derived palette (see §1) — first-pass, not brand-owner-approved | Requested UI mockups need real values per Rule 1 (don't invent silently); no brand owner has weighed in yet, so this is usable-now-not-final, the same posture ADR-01 had before acceptance | 2026-08-19 |
 | Typography: Sarabun + Noto Sans Thai fallback, 16px floor for anything read to act on | Every spec and screen so far is Thai though the UI-language question is still open; 16px floor follows directly from the mobile/glance-under-pressure constraints already on record, not a new assumption | 2026-08-19 |
 | Switch vs Checkbox: rule by interaction shape — Switch for immediate no-submit state changes (menu sold-out), Checkbox for batched choices confirmed by an action (cookie consent categories) | Spec wording mixes on/off and tick language for the two cases, so text wasn't a reliable signal; the menu toggle changes instantly with no confirm step while cookie categories are gathered and confirmed together, matching each control's normal convention | 2026-08-19 |
+| Menu price validation: whole Baht, >0, ฿2,000 soft ceiling, name+price required, validate on submit — first-pass business policy, not spec-derived | Nothing in `20260802-01` sets a price bound; BR-4/AC-9 only govern timing of a price change, not valid values. Minimum >0 is a technical necessity (BL-004 has nothing to charge otherwise); the rest is a reasoned starting policy, marked revisable the same way Brand Colors was | 2026-08-19 |
 
 Update this table whenever a real design decision is made — including "we decided not to decide X yet."
 
