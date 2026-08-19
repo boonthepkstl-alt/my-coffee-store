@@ -1,7 +1,10 @@
 # Check catalogue
 
-15 checks in four groups. Each states its class — **A** repairs the backlog,
-**B** stops and asks. Commands assume the repo root as cwd.
+22 checks in five groups. Each states its class — **A** repairs a document
+(usually the backlog; group 5's C13-equivalents may edit a journey/prototype
+back-link instead), **B** stops and asks. Commands assume the repo root as cwd.
+Groups 1-4 (C1-C15) check spec↔backlog; group 5 (C16-C22) checks the rest of
+the pipeline — journey, prototype, test case, test plan.
 
 Checks marked 🔥 have already fired on this repo at least once. They are not
 hypothetical.
@@ -181,10 +184,86 @@ contradiction and the specs disagree about what is being built.
 
 ---
 
+## Group 5 — Full-pipeline traceability (journey / prototype / test)
+
+Added when the pipeline grew past spec+backlog. These check the chain:
+`spec → journey → prototype → AC (in spec §6) → test case → test plan`.
+If a stage doesn't exist yet for a given feature, its checks simply find
+nothing — that's a normal early-pipeline state, not a finding.
+
+### C16 — Journey exists with no matching spec/backlog scope — class B
+
+A journey's frontmatter names a spec or BL id that doesn't exist. Same
+reasoning as C2: could be a typo, could trace back to a deleted spec.
+
+```bash
+grep -H -m1 '^spec:' docs/02-design/01-prototypes/*-journey.md 2>/dev/null
+```
+
+### C17 — Spec/backlog scope has no journey yet — class A, report only
+
+Not a defect — most features don't have journeys yet at this pipeline's
+current stage. Report what's missing so the next `feature-journey` pass knows
+where to start; don't treat it as drift needing repair.
+
+### C18 — Prototype references a component not in DESIGN.md §3 — class B 🔥
+
+This is exactly the failure mode `prototype`'s own skill instructs against.
+If it shows up anyway, it's not safely auto-fixable — either the prototype
+needs its invented component removed, or `DESIGN.md` genuinely needs that
+component added. Both require a person to decide.
+
+```bash
+grep -A2 '^### Components ที่ใช้' docs/02-design/01-prototypes/*-prototype.md 2>/dev/null
+```
+
+Cross-check named components against the `DESIGN.md` §3 headings by eye — no
+single grep captures this reliably; treat this check as a required manual
+read, not a shell one-liner.
+
+### C19 — Prototype assigns a real value to a DESIGN.md `TBD` token — class B
+
+The other half of C18's failure mode: a color/font/spacing value appearing in
+a prototype where `DESIGN.md` §2 says `TBD`. Never silently accept the
+prototype's value as the new decision — that's a design decision hiding
+inside a document meant to only reference decisions, and it needs a person to
+confirm it was actually decided somewhere.
+
+### C20 — AC referenced by a test case doesn't exist in the spec — class B
+
+```bash
+grep -oh 'AC-[0-9.]*' docs/03-testing/01-test-plan/*-test-cases.md 2>/dev/null | sort -u | while read -r ac; do
+  grep -rq -- "\*\*$ac\*\*" docs/01-requirements/01-spec/2026*.md || echo "ORPHAN TEST -> $ac"
+done
+```
+
+An orphan test case means either the AC was renumbered (forbidden — see C6's
+reasoning) or the test was written against a requirement that never existed.
+Either way, a person needs to say which.
+
+### C21 — AC in scope has no test case — class A, report only
+
+```bash
+grep -oh '\*\*AC-[0-9.]*\*\*' docs/01-requirements/01-spec/2026*.md | tr -d '*' | sort -u | while read -r ac; do
+  grep -rq -- "$ac" docs/03-testing/01-test-plan/*-test-cases.md 2>/dev/null || echo "UNCOVERED  $ac"
+done
+```
+
+Report as coverage gaps for `test-writer` to pick up — not a repair this audit
+makes itself, since writing a test case is drafting work, not tidying.
+
+### C22 — Test plan exists with no test cases behind it — class B
+
+A test plan should never be written before its test cases per
+`test-design`'s own Procedure B. If one exists anyway, something skipped a
+step — flag it rather than assume the plan is still valid.
+
+---
+
 ## Reporting shape
 
 ```
-ตรวจ 15 ข้อ — พบปัญหา N ข้อ (class A: X ซ่อมแล้ว / class B: Y รอตัดสินใจ)
+ตรวจ N ข้อ — พบปัญหา N ข้อ (class A: X ซ่อมแล้ว / class B: Y รอตัดสินใจ)
 
 | ข้อ | สิ่งที่พบ | Class | ผลลัพธ์ |
 | --- | --- | --- | --- |

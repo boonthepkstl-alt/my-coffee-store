@@ -1,6 +1,6 @@
 ---
 name: requirement-backlog-audit
-description: Audit whether the requirement specs under docs/01-requirements/01-spec/ and docs/01-requirements/backlog.md still agree with each other, then repair the backlog where it has drifted. Use when asked whether requirements and backlog are up to date, in sync, or consistent; before planning or a sprint; after several specs have been added or edited; or when a backlog item looks orphaned or a spec looks unrepresented. Triggers on "ตรวจสอบ requirement", "backlog ตรงไหม", "up to date", "sync", "ตรวจ backlog", "audit".
+description: Audit consistency across the whole pipeline — requirement specs, backlog.md, User Journeys, Prototypes, and Test Cases/Plans — then repair what's safely repairable. Originally scoped to spec↔backlog only; extended to cover the full chain (see checks.md groups 1-4 for spec/backlog, group 5 for journey/prototype/test) rather than standing up a separate traceability-auditor, since the two would duplicate almost all of their logic. Use when asked whether requirements, backlog, journeys, prototypes, or tests are up to date, in sync, or consistent; before planning or a sprint; after several documents have been added or edited; or when any document in the chain looks orphaned or unrepresented. Triggers on "ตรวจสอบ requirement", "backlog ตรงไหม", "up to date", "sync", "ตรวจ backlog", "traceability", "audit ทั้ง pipeline".
 ---
 
 # Requirement ↔ Backlog audit
@@ -47,8 +47,14 @@ a finding.
 
 ## Step 2 — Run the checks
 
-Work through `references/checks.md` in order. It holds all 15 checks, the shell
-command for each, and the class (A or B) each one lands in.
+Work through `references/checks.md` in order. It holds all checks (spec↔backlog
+in groups 1-4, full-pipeline traceability in group 5 covering
+journey/prototype/AC-extension/test-case/test-plan), the shell command for
+each, and the class (A or B) each one lands in.
+
+If the caller only wants spec↔backlog checked and journeys/prototypes/tests
+don't exist yet for the scope in question, group 5 checks simply find nothing
+to check — report that plainly rather than skipping the group silently.
 
 Do not stop at the first failure — collect everything, then repair once.
 Findings interact: a missing BL row and a stale count are usually one cause.
