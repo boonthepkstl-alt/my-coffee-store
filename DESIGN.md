@@ -238,8 +238,35 @@ For every component below — required or not — **Variants, States (beyond wha
 
 ### Forms
 
-- **Input** — **Required** for menu item fields (name, price) in staff admin (BL-001) and for any account fields in BL-006. Validation rules: `TBD`.
-- **Select** — **Required** for drink options (size, hot/cold, sweetness, toppings) in the customer order flow (US-2). Exact control (native select vs. custom picker vs. button group) is `TBD`.
+- **Input** — **Required** for menu item fields (name, price) in staff admin (BL-001), for account fields (BL-006), and for the customer's order note to the barista (`20260802-01` §2, in scope — free text, not a fixed choice like §3's Select). Price-specific validation is already decided (§ above); general validation style still `TBD`.
+
+  **Decided 2026-08-19:**
+
+  | Property | Value |
+  | --- | --- |
+  | Container | Bordered box, `radius-sm` (6px), `color.border` outline, `color.surface` background — not underline-only, so the field reads as a container on both the cream customer background and the white staff screens |
+  | Label | Always visible above the field, never placeholder-as-label — a placeholder that disappears on typing isn't a label, and this repo already has an open accessibility gap (§4) that a disappearing label would make worse, not better |
+  | Text | 16px (Form token, §2 Typography) — the same floor as everywhere else text is acted on |
+  | Focus | 2px outline in `color.info`, 2px offset — same treatment as Button, so focus reads consistently across every interactive element |
+  | Error | Border turns `color.error`; message in Caption size, `color.error`, directly below the field — matches how the menu price rule (§ above) already said errors should appear |
+- **Select** — **Required** for drink options (size, hot/cold, sweetness, toppings) in the customer order flow (US-2).
+
+  **Decided 2026-08-19: button-group / chip selector, not a native `<select>`
+  dropdown.** Every option set here is small (2–5 choices: size, hot/cold/
+  blended, most topping lists) and this is the customer's mobile,
+  one-handed, fast-ordering context — the constraint already on record since
+  §1. A native dropdown costs an extra tap-then-scroll-then-tap for a choice
+  that a single row of visible buttons shows and resolves in one tap. Chips
+  use `radius-full` (matching Badge's pill shape), selected state uses
+  `color.primary` fill, unselected uses `color.surface` with `color.border`
+  outline.
+
+  **Left open:** "ระดับความหวาน" (sweetness) — the spec doesn't say whether
+  this is a small discrete set (มาก/กลาง/น้อย) or a percentage scale (0–100%,
+  as some real coffee menus use). A discrete set fits the chip pattern above;
+  a percentage scale would need a slider instead, which is a different
+  control this decision doesn't cover. Confirm which before building this
+  specific option.
 - **Checkbox** — **Required** for the cookie consent banner's per-category toggles (`20260802-03` BR-2, BR-3). Binding rule: "วิเคราะห์" and "การตลาด" must default **unchecked** — this is fixed by BR-3, not a visual choice. **Confirmed as Checkbox, not Switch — decided 2026-08-19**, see the rule below.
 - **Radio** — Not yet required by any current spec.
 - **Switch** — **Required** for the menu item "sold out" toggle (BL-001, US-6). **Decided 2026-08-19: Switch, not Checkbox** — see the rule below.
@@ -280,7 +307,24 @@ it should render as checkboxes; noted as a fix rather than silently left.
 ### Data Display
 
 - **Table** — **Required** for staff/owner menu management (BL-001) and any future admin-style record list (order-status review, spec §3). ~~and the barista order queue (US-5, BL-005)~~ — **decided 2026-08-19: not for the barista queue**, see the Table-vs-Card rule below. Column layout, sort, and filter behavior: `TBD`.
-- **Card** — **Required** for the customer-facing menu item list (US-2) **and the barista order queue (US-5, BL-005) — decided 2026-08-19**, see the rule below. Card-internal layout (what fields, what order) is still `TBD`.
+- **Card** — **Required** for the customer-facing menu item list (US-2) **and the barista order queue (US-5, BL-005) — decided 2026-08-19**, see the Table-vs-Card rule above for which screens use it.
+
+  **Container decided 2026-08-19:** `color.surface` background, `color.border`
+  1px outline, `radius-md` (8px), `space-4` (16px) padding. Flat — no shadow.
+  Deliberately **no second "tinted surface" tone** added just to separate a
+  card from a white screen background — the border alone is the separation
+  mechanism, matching how Table already separates rows (border lines, not
+  zebra striping) and Alert/Badge (flat, tinted only for semantic meaning,
+  not for layering). If a border genuinely proves too subtle once real
+  screens exist, that's a call to make from an actual screenshot, not a
+  token to pre-invent now.
+
+  **Internal layout stays per-use** (this is *why* Table-vs-Card chose Card
+  for these two screens in the first place — variable content, not uniform
+  rows): the menu item card (image, name, price, options summary) and the
+  barista order card (table number, item list, action button) keep their
+  own internal layouts, already specified in each screen's prototype
+  document — this entry only fixes the shared container.
 
 **Table vs Card — decision (2026-08-19):** the ambiguity wasn't "which one does this repo use" — it was two genuinely different data shapes wearing the same name. Resolved as a rule, not a single blanket pick:
 
@@ -455,6 +499,9 @@ No mapping can be populated yet — there is no CSS variable, no component file,
 | Button: Primary + Ghost only, reject/accept pairs must use the same variant | Satisfies BR-4 (cookie reject ≥ accept prominence) by construction — pairing Primary-accept with Ghost-reject would violate it regardless of size, so the rule forbids that pairing outright rather than leaving it to per-screen judgment | 2026-08-19 |
 | Badge: pill shape, tinted (not solid) semantic background, never decorative | A solid `color.error` badge next to body text would compete with real error Alerts for visual weight; tinting keeps a badge legible without borrowing Alert-level urgency | 2026-08-19 |
 | Alert: inline only, no toast/banner mechanism; no auto-dismiss when it gates a required decision | Every current use (sold-out warning, permission backstop, offline message) is attached to one screen moment, not a global announcement; toast implies dismissible-and-transient, wrong for something the user must act on before proceeding | 2026-08-19 |
+| Input: bordered container, always-visible label (never placeholder-as-label), same focus ring as Button | A placeholder that vanishes on typing isn't a label and would compound the accessibility gap this document already flags; consistent focus treatment matters more than per-component novelty | 2026-08-19 |
+| Select: button-group/chip, not a native dropdown; sweetness level left open (discrete vs. percentage) | Every option set is small (2–5) in a mobile, one-handed, fast-ordering context already on record — a dropdown costs an extra tap-scroll-tap a visible chip row doesn't; sweetness wasn't decided because the spec doesn't say whether it's discrete or a slider-scale, and those need different controls | 2026-08-19 |
+| Card: bordered container, no added "tinted surface" tier just for layering | Matches how Table already separates rows (borders, not zebra striping) and Alert/Badge (flat, tint only for meaning); inventing a second surface tone to solve a layering problem that hasn't been observed on a real screen yet would be exactly the kind of ungrounded token Rule 1 exists to prevent | 2026-08-19 |
 
 Update this table whenever a real design decision is made — including "we decided not to decide X yet."
 
