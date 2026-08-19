@@ -179,6 +179,6 @@ supersedes: []
 
 - [[20260802-02-pdpa-it-compliance|20260802-02]] — ข้อกำหนด PDPA ภาพรวม (เอกสารแม่ของเรื่องนี้)
 - [[20260802-01-table-self-ordering|20260802-01]] — ระบบรับออร์เดอร์ด้วยตนเองจากโต๊ะ
-- [[../../02-design/02-technical/20260802-01-adr-platform-stack|ADR-01]] — เลือกแพลตฟอร์มหลัก (ยังเป็น `เสนอ`)
+- [[../../02-design/02-technical/20260802-01-adr-platform-stack|ADR-01]] — เลือกแพลตฟอร์มหลัก (`ยอมรับแล้ว`)
 - [[../index|01-requirements]]
 - [[../../05-log/index|05-log]]
