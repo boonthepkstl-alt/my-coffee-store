@@ -200,9 +200,26 @@ For every component below — required or not — **Variants, States (beyond wha
 
 - **Input** — **Required** for menu item fields (name, price) in staff admin (BL-001) and for any account fields in BL-006. Validation rules: `TBD`.
 - **Select** — **Required** for drink options (size, hot/cold, sweetness, toppings) in the customer order flow (US-2). Exact control (native select vs. custom picker vs. button group) is `TBD`.
-- **Checkbox** — **Required** for the cookie consent banner's per-category toggles (`20260802-03` BR-2, BR-3). Binding rule: "วิเคราะห์" and "การตลาด" must default **unchecked** — this is fixed by BR-3, not a visual choice.
+- **Checkbox** — **Required** for the cookie consent banner's per-category toggles (`20260802-03` BR-2, BR-3). Binding rule: "วิเคราะห์" and "การตลาด" must default **unchecked** — this is fixed by BR-3, not a visual choice. **Confirmed as Checkbox, not Switch — decided 2026-08-19**, see the rule below.
 - **Radio** — Not yet required by any current spec.
-- **Switch** — **Required**, likely for the menu item "sold out" toggle (BL-001, US-6) — spec doesn't mandate switch vs. checkbox visually, `TBD` which control.
+- **Switch** — **Required** for the menu item "sold out" toggle (BL-001, US-6). **Decided 2026-08-19: Switch, not Checkbox** — see the rule below.
+
+**Switch vs Checkbox — decision (2026-08-19):** the spec text itself mixes
+metaphors (BR-2 says the necessary cookie category "เปิดตลอด...ปิดไม่ได้" —
+on/off language; BR-3 says the other categories must not be "ติ๊กมาให้ล่วงหน้า"
+— tick language) so wording isn't a reliable signal either way. Decided by
+interaction shape instead:
+
+| Use **Switch** when... | Use **Checkbox** when... |
+| --- | --- |
+| The control takes effect immediately, alone, with no separate submit step | The control is one of several choices gathered together and confirmed by an explicit action |
+| Example: **menu sold-out toggle (BL-001)** — journey confirms it changes on-screen the instant it's tapped, no confirmation | Example: **cookie category consent (BL-014)** — categories sit together and are confirmed via "ยอมรับทั้งหมด" / "ปฏิเสธทั้งหมด" / a save action, matching how consent forms are read elsewhere |
+
+Same shape as the Table-vs-Card rule: not a single blanket pick, because the
+two use cases genuinely behave differently — one is a live state flip, the
+other is a batched choice. The earlier UI mockup used a switch-styled control
+for the cookie banner, which this decision makes visually incorrect there —
+it should render as checkboxes; noted as a fix rather than silently left.
 - **Date Picker** — Not yet required by any current spec.
 - **Search** — Not yet required by any current spec.
 - **Validation** — `TBD` in full; no validation style, message pattern, or timing (on-blur vs. on-submit) has been specified anywhere.
@@ -347,6 +364,7 @@ No mapping can be populated yet — there is no CSS variable, no component file,
 | Permission State: hide the control by default, Alert as backstop, no dedicated denial screen | AC-8/AC-9 require the system to reject an unauthorized attempt (and, for PDPA, log it) — they don't require a full denial UI. Hiding first avoids a confusing dead end; a screen or modal for a rare, recoverable event was considered and rejected as more ceremony than the requirement calls for | 2026-08-19 |
 | Brand Colors: warm coffee-derived palette (see §1) — first-pass, not brand-owner-approved | Requested UI mockups need real values per Rule 1 (don't invent silently); no brand owner has weighed in yet, so this is usable-now-not-final, the same posture ADR-01 had before acceptance | 2026-08-19 |
 | Typography: Sarabun + Noto Sans Thai fallback, 16px floor for anything read to act on | Every spec and screen so far is Thai though the UI-language question is still open; 16px floor follows directly from the mobile/glance-under-pressure constraints already on record, not a new assumption | 2026-08-19 |
+| Switch vs Checkbox: rule by interaction shape — Switch for immediate no-submit state changes (menu sold-out), Checkbox for batched choices confirmed by an action (cookie consent categories) | Spec wording mixes on/off and tick language for the two cases, so text wasn't a reliable signal; the menu toggle changes instantly with no confirm step while cookie categories are gathered and confirmed together, matching each control's normal convention | 2026-08-19 |
 
 Update this table whenever a real design decision is made — including "we decided not to decide X yet."
 

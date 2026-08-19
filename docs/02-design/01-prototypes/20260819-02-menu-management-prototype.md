@@ -36,7 +36,7 @@ Device context: จอบาริสต้า/พนักงาน (DESIGN.md 
 | Component (ชื่อจาก DESIGN.md §3) | Purpose บนหน้าจอนี้ | Variant/เนื้อหา |
 | --- | --- | --- |
 | Table | แสดงรายการเมนูทั้งหมด | ตัดสินแล้ว 2026-08-19 (DESIGN.md §3) — รายการเมนูเป็นข้อมูลแถวสม่ำเสมอ (ชื่อ/ราคา/สถานะ/ปุ่ม) เข้าเกณฑ์ Table |
-| Switch **หรือ** Checkbox | สลับเปิด/ปิดขายรายเมนู | **ยังไม่ตัดสินว่าแบบใด — DESIGN.md §3 ระบุไว้แล้วว่าเป็นช่องว่าง** |
+| Switch | สลับเปิด/ปิดขายรายเมนู | ตัดสินแล้ว 2026-08-19 (DESIGN.md §3) — เปลี่ยนสถานะทันทีไม่ต้องกดยืนยัน เข้าเกณฑ์ Switch |
 | Badge | แสดงสถานะ "ของหมด" บนรายการที่ปิดขาย | |
 | Button | ปุ่ม "แก้ไข" ต่อแถว — **ซ่อนทั้งหมดสำหรับพนักงานที่ไม่ใช่เจ้าของร้าน** (ไม่ใช่แค่ปิดใช้งาน) ตาม Permission State pattern ที่ตัดสินแล้ว | |
 
@@ -132,8 +132,8 @@ States ของ Screen 1 (แถว "Permission — layer 1" และ "layer 2
 
 - ~~Table vs Card สำหรับรายการเมนู~~ — **ตัดสินแล้ว 2026-08-19: Table** (ดู DESIGN.md §3
   และ §7 Design Decisions)
-- **Switch vs Checkbox สำหรับสลับเปิด/ปิดขาย** — DESIGN.md §3 ระบุไว้แล้วว่าเป็น
-  ช่องว่าง (`TBD` ซึ่ง control) ไม่ใช่เรื่องใหม่ที่ prototype นี้พบ
+- ~~Switch vs Checkbox สำหรับสลับเปิด/ปิดขาย~~ — **ตัดสินแล้ว 2026-08-19: Switch**
+  (ดู DESIGN.md §3 และ §7 Design Decisions)
 - ~~Permission State pattern~~ — **ตัดสินแล้ว 2026-08-19** (ซ่อนปุ่ม + Alert backstop
   ดู DESIGN.md §3 และ §7 Design Decisions)
 - **Loading / Empty / Error state ทั่วไป** — ไม่มี pattern ที่กำหนดไว้เลย
@@ -141,8 +141,8 @@ States ของ Screen 1 (แถว "Permission — layer 1" และ "layer 2
 ## 6. คำถามที่ยังค้าง
 
 - [x] ~~Table vs Card~~ — ตัดสินแล้ว 2026-08-19 (Table)
+- [x] ~~Switch vs Checkbox~~ — ตัดสินแล้ว 2026-08-19 (Switch)
 - [x] ~~Permission State pattern~~ — ตัดสินแล้ว 2026-08-19 (ซ่อนปุ่ม + Alert backstop)
-- [ ] Switch vs Checkbox — รอการตัดสินใจ design
 - [ ] กฎ validation ของราคาเมนู (ต้องมากกว่า 0? ทศนิยมกี่ตำแหน่ง?) — ไม่มีในสเปค
 
 ## 7. เอกสารอ้างอิง
