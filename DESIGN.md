@@ -142,17 +142,38 @@ variable lighting, one-handed use, glance-under-pressure) argues against
 anything smaller for content a customer or barista actually reads to act on.
 Caption is the one deliberate exception, for secondary/de-emphasized text only.
 
-### Spacing
+### Spacing — decided 2026-08-19 (minimum needed to give Badge/Button/Alert a real treatment)
 
-`TBD` — no spacing scale exists. Propose adopting a standard 4px-based scale (`space-1` … `space-16`) at the point the styling approach is chosen, rather than deciding it in this document without any code to ground it in.
+```text
+space-1    4px
+space-2    8px
+space-3    12px
+space-4    16px
+space-6    24px
+space-8    32px
+space-12   48px
+space-16   64px
+```
 
-### Border Radius
+Standard 4px base, as this document originally proposed. Button padding uses
+`space-3 space-4` (12px/16px vertical/horizontal); a compact variant uses
+`space-2 space-3`.
 
-`TBD`
+### Border Radius — decided 2026-08-19
+
+```text
+radius-sm     6px    inputs
+radius-md     8px    buttons, alerts, cards
+radius-lg     14px   sheets/overlays (e.g. the cookie consent panel)
+radius-full   999px  pills — badges, switches
+```
 
 ### Shadows
 
-`TBD`
+`TBD` — still not needed to give Badge/Button/Alert a real treatment (all three
+read fine flat, per §3 below); left open rather than decided just to fill the
+section. Decide when a component genuinely needs elevation (a modal, a
+dropdown) — don't invent a shadow scale ahead of that need.
 
 ### Layout
 
@@ -191,7 +212,26 @@ For every component below — required or not — **Variants, States (beyond wha
 
 ### Actions
 
-- **Button** — **Required.** Every confirm/pay/toggle action in `20260802-01` needs one (US-2 through US-7). Purpose per use is known from the specs; visual variant, size, and states are `TBD`. One binding constraint already fixed by requirement, not by visual design: in the cookie banner, the reject button must be *at least as* prominent as the accept button (`20260802-03` BR-4) — this is a UI requirement, not a suggestion.
+- **Button** — **Required.** Every confirm/pay/toggle action in `20260802-01` needs one (US-2 through US-7). One binding constraint already fixed by requirement, not by visual design: in the cookie banner, the reject button must be *at least as* prominent as the accept button (`20260802-03` BR-4) — this is a UI requirement, not a suggestion.
+
+  **Decided 2026-08-19:**
+
+  | Property | Value |
+  | --- | --- |
+  | Variants | **Primary** — `color.primary` background, `color.primary-ink` (white) text. **Ghost** — transparent background, `color.text.primary` text, `color.border` outline. No third variant yet — don't add one without a screen that needs it |
+  | Size (default) | `space-3 space-4` padding (12px/16px), 16px/600 weight text (Button token, §2 Typography) |
+  | Size (compact) | `space-2 space-3` padding (8px/12px), for dense contexts like a table row action |
+  | Radius | `radius-md` (8px) |
+  | Hover | Primary: background brightened slightly. Ghost: `color.background`-tinted fill |
+  | Focus | 2px outline in `color.info`, 2px offset — visible, not just a color change, for keyboard use |
+  | Disabled | 50% opacity, no pointer cursor, no hover/focus effect |
+  | Loading | Not decided — no spinner/icon system exists yet; don't invent one to fill this row |
+
+  The reject-vs-accept prominence rule (BR-4) is satisfied by **never pairing
+  Primary with Ghost for a binary accept/reject choice** — both sides of a
+  reject/accept pair use the same variant (both Primary, or both Ghost),
+  differing only in label. A Primary "accept" next to a Ghost "reject" would
+  violate BR-4 by construction, regardless of size.
 - **Icon Button** — Not yet required.
 - **Dropdown** — Not yet required.
 - **Menu (contextual)** — Not yet required.
@@ -251,7 +291,23 @@ it should render as checkboxes; noted as a fix rather than silently left.
 | Example: **menu management (BL-001)** | Example: **barista order queue (BL-005)** |
 
 This isn't "Table for staff, Card for customers" — both examples above are staff-facing. The distinguishing factor is the shape and urgency of the content, not who's looking at it. Apply this rule to the next list-shaped screen rather than re-opening the question; if a screen doesn't clearly fit either row in the table above, that's worth raising again, not silently defaulting to one.
-- **Badge** — **Required** for order status (e.g., "รับแล้ว" / "เสร็จแล้ว", `20260802-01` §2) and for "sold out" marking on a menu item. Visual treatment `TBD`.
+- **Badge** — **Required** for order status (e.g., "รับแล้ว" / "เสร็จแล้ว", `20260802-01` §2) and for "sold out" marking on a menu item.
+
+  **Decided 2026-08-19:** pill shape (`radius-full`), `space-1` (4px) vertical
+  padding / roughly `space-2`–`space-3` horizontal, 12px text at 500 weight
+  (Caption token, §2 Typography). Semantic meaning drives color — a badge is
+  **never** decorative, it always signals a real state:
+
+  | Meaning | Background | Text |
+  | --- | --- | --- |
+  | Success (e.g. "เสร็จแล้ว") | `color.success` tinted ~12% over `color.surface` | `color.success` |
+  | Warning (e.g. "ของหมด", "รับแล้ว" while still pending) | `color.warning` tinted ~12% over `color.surface` | `color.warning` |
+  | Neutral/informational count (e.g. "3 ใบรอทำ") | `color.border` | `color.text.secondary` |
+
+  A tinted background rather than a solid semantic fill — a solid `color.error`
+  badge sitting next to body text would compete with real error Alerts for
+  visual weight; the tint keeps a badge legible without it reading as urgent
+  as an Alert.
 - **Tag** — Not yet required.
 - **Avatar** — Not yet required — no user-facing profile concept exists in any spec.
 - **Tooltip** — Not yet required.
@@ -259,7 +315,23 @@ This isn't "Table for staff, Card for customers" — both examples above are sta
 
 ### Feedback
 
-- **Alert** — **Required** for the sold-out-mid-selection warning (`20260802-01` §7) and the offline/no-signal message. Placement (inline vs. banner) `TBD`.
+- **Alert** — **Required** for the sold-out-mid-selection warning (`20260802-01` §7), the offline/no-signal message, and the Permission State layer-2 backstop (§ above).
+
+  **Decided 2026-08-19: inline, not toast or banner.** Every current use is
+  attached to a specific moment on a specific screen — a cart item, a
+  permission attempt, a connectivity check — not a global system-wide
+  announcement. A toast implies transient and dismissible, wrong for
+  something the user must read and act on (e.g. remove a sold-out item
+  before paying); a top-of-page banner implies persistent and general, wrong
+  for a one-off contextual warning. Inline, next to what triggered it, matches
+  all three cases without inventing a fourth mechanism.
+
+  | Property | Value |
+  | --- | --- |
+  | Radius | `radius-md` (8px) |
+  | Padding | `space-3` (12px) |
+  | Background/text | Semantic pair matching severity — `color.error`/error-tint for permission denial and payment failure, `color.warning`/warning-tint for sold-out-mid-selection, `color.info`/neutral-tint for offline/no-signal (informational, not the user's fault) |
+  | Dismissal | **No auto-dismiss** when the Alert gates a required decision (remove a sold-out item, retry a denied action) — it stays until the underlying state resolves. Only a purely informational Alert with no required follow-up may be dismissed by the user |
 - **Toast / Snackbar** — Not yet decided as the mechanism for any of the above — could be Toast, could be Alert, could be inline. This choice is explicitly open (see §4, Notifications).
 - **Modal** — **Required**, likely for payment confirmation (US-3) and for the consent preference center (`20260802-03` BL-016) — whether these use Modal vs. Dialog vs. a full-screen step is `TBD`.
 - **Dialog / Confirmation Dialog** — **Required** for any destructive or hard-to-undo staff action (e.g., cancelling an order, removing a menu item) per general UX good practice — no spec currently enumerates which actions need confirmation; this is a real gap, see §4.
@@ -379,6 +451,10 @@ No mapping can be populated yet — there is no CSS variable, no component file,
 | Typography: Sarabun + Noto Sans Thai fallback, 16px floor for anything read to act on | Every spec and screen so far is Thai though the UI-language question is still open; 16px floor follows directly from the mobile/glance-under-pressure constraints already on record, not a new assumption | 2026-08-19 |
 | Switch vs Checkbox: rule by interaction shape — Switch for immediate no-submit state changes (menu sold-out), Checkbox for batched choices confirmed by an action (cookie consent categories) | Spec wording mixes on/off and tick language for the two cases, so text wasn't a reliable signal; the menu toggle changes instantly with no confirm step while cookie categories are gathered and confirmed together, matching each control's normal convention | 2026-08-19 |
 | Menu price validation: whole Baht, >0, ฿2,000 soft ceiling, name+price required, validate on submit — first-pass business policy, not spec-derived | Nothing in `20260802-01` sets a price bound; BR-4/AC-9 only govern timing of a price change, not valid values. Minimum >0 is a technical necessity (BL-004 has nothing to charge otherwise); the rest is a reasoned starting policy, marked revisable the same way Brand Colors was | 2026-08-19 |
+| Spacing (4px-based scale) and Border Radius (sm/md/lg/full) decided as a prerequisite | Badge/Button/Alert can't have a real treatment without them — same reasoning as deciding Colors/Typography before the first mockup | 2026-08-19 |
+| Button: Primary + Ghost only, reject/accept pairs must use the same variant | Satisfies BR-4 (cookie reject ≥ accept prominence) by construction — pairing Primary-accept with Ghost-reject would violate it regardless of size, so the rule forbids that pairing outright rather than leaving it to per-screen judgment | 2026-08-19 |
+| Badge: pill shape, tinted (not solid) semantic background, never decorative | A solid `color.error` badge next to body text would compete with real error Alerts for visual weight; tinting keeps a badge legible without borrowing Alert-level urgency | 2026-08-19 |
+| Alert: inline only, no toast/banner mechanism; no auto-dismiss when it gates a required decision | Every current use (sold-out warning, permission backstop, offline message) is attached to one screen moment, not a global announcement; toast implies dismissible-and-transient, wrong for something the user must act on before proceeding | 2026-08-19 |
 
 Update this table whenever a real design decision is made — including "we decided not to decide X yet."
 
