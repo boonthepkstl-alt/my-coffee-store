@@ -142,8 +142,18 @@ For every component below — required or not — **Variants, States (beyond wha
 
 ### Data Display
 
-- **Table** — **Required** for the barista order queue (US-5, BL-005) and likely for staff/owner menu management (BL-001) and order-status review (spec §3). Column layout, sort, and filter behavior: `TBD`.
-- **Card** — **Required** for the customer-facing menu item list (US-2) and the barista order queue (an order-per-card pattern is one plausible fit for US-5, not decided).
+- **Table** — **Required** for staff/owner menu management (BL-001) and any future admin-style record list (order-status review, spec §3). ~~and the barista order queue (US-5, BL-005)~~ — **decided 2026-08-19: not for the barista queue**, see the Table-vs-Card rule below. Column layout, sort, and filter behavior: `TBD`.
+- **Card** — **Required** for the customer-facing menu item list (US-2) **and the barista order queue (US-5, BL-005) — decided 2026-08-19**, see the rule below. Card-internal layout (what fields, what order) is still `TBD`.
+
+**Table vs Card — decision (2026-08-19):** the ambiguity wasn't "which one does this repo use" — it was two genuinely different data shapes wearing the same name. Resolved as a rule, not a single blanket pick:
+
+| Use **Table** when... | Use **Card** when... |
+| --- | --- |
+| Rows are uniform — same fields, one line each (e.g. menu item: name, price, status, action) | Each item has variable-length or multi-part content (e.g. an order: table number, several line items, options, notes) |
+| The screen is admin/record-management — benefits from scanning a column, sorting, comparing rows | The screen must be read at a glance under time pressure — DESIGN.md §1 already inferred the barista screen needs exactly this |
+| Example: **menu management (BL-001)** | Example: **barista order queue (BL-005)** |
+
+This isn't "Table for staff, Card for customers" — both examples above are staff-facing. The distinguishing factor is the shape and urgency of the content, not who's looking at it. Apply this rule to the next list-shaped screen rather than re-opening the question; if a screen doesn't clearly fit either row in the table above, that's worth raising again, not silently defaulting to one.
 - **Badge** — **Required** for order status (e.g., "รับแล้ว" / "เสร็จแล้ว", `20260802-01` §2) and for "sold out" marking on a menu item. Visual treatment `TBD`.
 - **Tag** — Not yet required.
 - **Avatar** — Not yet required — no user-facing profile concept exists in any spec.
@@ -241,6 +251,7 @@ No mapping can be populated yet — there is no CSS variable, no component file,
 | No CSS/styling framework chosen yet | Deliberately deferred — not part of ADR-01's scope; needs its own decision | 2026-08-02 |
 | Cookie consent: 3-category banner, reject-as-easy-as-accept, off-by-default | Legal requirement (PDPA), not a design preference — see `20260802-03` BR-1–5 | 2026-08-02 |
 | This document written mostly `TBD` rather than invented | No frontend code, brand, or visual asset exists to analyze; inventing values would misrepresent this as a settled system | 2026-08-02 |
+| Table vs Card: rule by data shape, not a single blanket pick — Table for uniform/admin rows (menu management, BL-001), Card for variable/glance-under-pressure content (barista queue, BL-005) | Two independent prototype audits (BL-001, BL-005) hit the identical undecided component — confirmed it was a system-level gap, not a per-feature one. A single fixed choice would have fit one screen and forced the other, since the barista queue's per-order content (multiple line items, options) doesn't sit in one table row the way a menu item does | 2026-08-19 |
 
 Update this table whenever a real design decision is made — including "we decided not to decide X yet."
 
