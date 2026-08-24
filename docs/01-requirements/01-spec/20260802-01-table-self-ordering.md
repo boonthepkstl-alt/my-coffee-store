@@ -164,7 +164,10 @@ supersedes: []
 - [[20260802-03-cookie-consent-analytics|20260802-03]] — ความยินยอมสำหรับคุกกี้และการวิเคราะห์การใช้งาน
 - [[../../02-design/02-technical/20260802-01-adr-platform-stack|ADR-01]] — เลือกแพลตฟอร์มหลัก (`ยอมรับแล้ว`)
 - [[../../02-design/01-prototypes/20260819-01-menu-management-journey|Journey: จัดการเมนู]] — User Journey ของ BL-001
+- [[../../02-design/01-prototypes/20260819-02-menu-management-prototype|Prototype: จัดการเมนู]] — Prototype Specification ของ BL-001
 - [[../../02-design/01-prototypes/20260819-03-barista-order-screen-journey|Journey: หน้าจอบาริสต้า]] — User Journey ของ BL-005
 - [[../../02-design/01-prototypes/20260819-04-barista-order-screen-prototype|Prototype: หน้าจอบาริสต้า]] — Prototype Specification ของ BL-005
+- [[../../02-design/02-technical/20260824-02-adr-payment-gateway|ADR-02]] — เลือกผู้ให้บริการชำระเงิน (`ยอมรับแล้ว`)
+- [[../../02-design/02-technical/20260824-03-architecture-api-db-design|เอกสารออกแบบ]] — สถาปัตยกรรม, API, Database schema
 - [[../index|01-requirements]]
 - [[../../05-log/index|05-log]]

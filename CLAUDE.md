@@ -28,11 +28,12 @@ This repository contains **no application code yet** — only the `docs/` docume
 
 - **`01-requirements/01-spec`** is the declared source of truth for requirements. It flows into `02-plan` (roadmap, phases, priorities), which breaks down into `03-task` (actionable to-dos with status).
 - **`02-design/02-technical`** holds the architecture / DB schema / API contracts blueprint — read this first when implementing, and it is the basis for `03-testing/01-test-plan`.
+- **[DESIGN.md](DESIGN.md)** (repo root, outside `docs/`) is the single source of truth for UI design tokens and component patterns — colors, typography, spacing, and per-component rules (Table vs Card, Button, Badge, etc.), each decided with a stated reason and logged in its own §7. Read it before touching any UI, and never invent a token or pattern it marks `TBD`.
 - **`04-retrospectives`** draws its evidence from `03-testing/02-test-result` and `05-log`.
 
 Each `index.md` states its own inputs and outputs at the bottom. Read the relevant `index.md` before adding a document to a folder — it defines what belongs there.
 
-**The pipeline is no longer empty, but coverage is uneven.** `docs/01-requirements/01-spec/` holds three specs (table self-ordering, PDPA/IT law, cookie consent — all `status: ร่าง`, all with open questions in their own section 8) plus `docs/01-requirements/backlog.md` with 17 items. `docs/02-design/02-technical/` holds one accepted ADR (the stack). `01-requirements/02-plan`, `03-task`, `02-design/01-prototypes`, all of `03-testing`, `04-retrospectives`, and `00-archived` are still just `index.md`. Don't assume a folder is populated — check it — and don't treat a `ร่าง` spec's open questions as settled.
+**The pipeline is no longer empty, but coverage is uneven.** `docs/01-requirements/01-spec/` holds three specs (table self-ordering, PDPA/IT law, cookie consent — all `status: ร่าง`, all with open questions in their own section 8) plus `docs/01-requirements/backlog.md` with 17 items. `docs/02-design/02-technical/` holds two accepted ADRs (platform stack, payment gateway) plus one architecture/API/database-schema design document — the design doc has sections explicitly marked `[สมมติฐาน]` where they depend on spec `02`'s still-open Q1/Q3, so don't treat those parts as settled. `docs/02-design/01-prototypes/` holds journeys and prototype specs for two features (BL-001, BL-005); the rest of the backlog has neither yet. `01-requirements/02-plan`, `03-task`, all of `03-testing`, `04-retrospectives`, and `00-archived` are still just `index.md`. Don't assume a folder is populated — check it — and don't treat a `ร่าง` spec's open questions as settled.
 
 ### Conventions to follow when writing docs
 
