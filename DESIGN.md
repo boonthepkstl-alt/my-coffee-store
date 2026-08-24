@@ -9,10 +9,10 @@ This is not a document reverse-engineered from an existing UI. It is written aga
 - **There is no frontend code.** No `package.json`, no `.css`/`.scss`, no `.tsx`/`.jsx`/`.vue`/`.svelte` file exists anywhere in the repo. Verified by full-tree search.
 - **There is no logo, favicon, icon set, or any visual asset.**
 - **No theme, color variable, font, spacing scale, or component has ever been written.**
-- **[ADR-03](docs/02-design/02-technical/20260824-04-adr-revise-backend-go.md)** (`ยอมรับแล้ว`, 2026-08-24; supersedes the archived [ADR-01](docs/00-archived/20260802-01-adr-platform-stack.md)) has decided the platform: React + Next.js (TypeScript) frontend, a separate Go backend service (Gin, gorilla/websocket, sqlc/pgx), PostgreSQL, a Thailand-based VPS. It does **not** decide a CSS/styling approach — no Tailwind, CSS Modules, styled-components, or component library has been chosen. That is an open decision, not an oversight of this document.
+- **[ADR-03](docs/02-design/02-technical/20260824-04-adr-revise-backend-go.md)** (`ยอมรับแล้ว`, 2026-08-24; supersedes the archived [ADR-01](docs/00-archived/20260802-01-adr-platform-stack.md)) has decided the platform: React + Next.js (TypeScript) frontend, a separate Go backend service (Gin, gorilla/websocket, sqlc/pgx), PostgreSQL, a Thailand-based VPS. It does **not** decide a component library — no component library has been chosen. The CSS/styling framework itself **is now decided — Tailwind CSS, see §2** — this paragraph is left as-is otherwise since ADR-03 itself doesn't cover styling.
 - **The requirement specs under `docs/01-requirements/01-spec/`** (three documents, all still `status: ร่าง`) do describe real product behavior, screens, user roles, and several UX rules with the force of business rules. Those are cited below with their source path — they are the only real design-relevant facts that exist yet.
 
-Consequently, almost every visual token in this document is `TBD`. That is the correct state, not a defect of this document. **Filling in a token with an invented value would be a bigger problem than leaving it TBD** — it would get built into the first components and become expensive to unwind. The first real design work this project needs is a **UI/visual-design ADR or prototype pass** (`docs/02-design/01-prototypes/`, currently empty) that picks a CSS approach, a palette, and a type scale — ideally before or alongside the first Next.js scaffold.
+Consequently, many visual tokens in this document are still `TBD`. That is the correct state, not a defect of this document. **Filling in a token with an invented value would be a bigger problem than leaving it TBD** — it would get built into the first components and become expensive to unwind. As of 2026-08-24 the CSS approach (Tailwind CSS, §2), palette (§1), and type scale (§2) are decided; Shadows, Layout, and Responsive Breakpoints (§2) remain open and should be settled alongside or before the first Next.js scaffold.
 
 ---
 
@@ -89,6 +89,24 @@ an inference with nothing built on it.
 
 No token in this section has a real value yet. The table below exists so that **when values are decided, they land in one place** rather than being invented ad hoc per component.
 
+### CSS / Styling Framework — decided 2026-08-24
+
+**Tailwind CSS**, configured via `tailwind.config.ts` `theme.extend` — the
+color/spacing/radius/typography tokens already decided below become the
+theme's source values directly (e.g. `theme.extend.colors.primary =
+"#6F4E37"`), not a separate hand-rolled variable layer to keep in sync.
+
+| Option | Verdict | Why |
+| --- | --- | --- |
+| **Tailwind CSS** | **Chosen** | Ships as the default styling option in `create-next-app` and has first-class App Router/Server Component support with no client-boundary tax — a plain compiled stylesheet, not a runtime. Utility classes suit this project's shape well: many small, structurally similar components (Badge, chip-style Select, Button variants) that each need a handful of the same tokens applied slightly differently, not large bespoke page layouts. Matches the same "boring, widest docs, small-team-friendly" reasoning [ADR-03](docs/02-design/02-technical/20260824-04-adr-revise-backend-go.md) already used to pick Gin and gorilla/websocket on the backend |
+| CSS Modules | Rejected | Built into Next.js with zero extra dependency, but gives no utility layer — every component would hand-write its own class rules even though most of them just apply the same handful of tokens (a border, a radius, a padding pair). More boilerplate for this project's actual shape, not less |
+| styled-components / Emotion (CSS-in-JS, runtime) | Rejected | Runtime CSS-in-JS needs explicit client-boundary opt-outs to work with the App Router's React Server Components, adding friction ADR-03's Next.js choice didn't sign up for; also a runtime cost Tailwind's compiled-CSS approach avoids entirely |
+| vanilla-extract / Panda CSS (zero-runtime CSS-in-JS) | Rejected | Technically reasonable (compiled, type-safe), but far smaller community/docs than Tailwind — this repo has consistently favored the option with the widest available documentation for a small team over the more novel one (same call as gorilla/websocket over coder/websocket in ADR-03) |
+
+No component library (e.g. shadcn/ui, Radix, MUI) is chosen alongside this —
+that's a separate, still-open decision (§1 notes it explicitly). Tailwind by
+itself only styles; it doesn't supply component primitives.
+
 ### Colors — decided 2026-08-19, see §1 Brand Colors for the full reasoning
 
 ```text
@@ -106,10 +124,10 @@ color.error            #C62828
 color.info             #1D6FA5
 ```
 
-No CSS variables exist to map these to yet — there is still no CSS file in the
-repo (no styling framework decided, §0). When one is chosen, define these as
-real CSS custom properties (`--color-primary`, etc.) there first — this table
-is the source of truth for the *values*, not a substitute for wiring them in.
+No `tailwind.config.ts` exists yet — there is still no frontend code in the
+repo (§0). When the Next.js app is scaffolded, wire these into
+`theme.extend.colors` there first — this table is the source of truth for the
+*values*, not a substitute for wiring them into the actual config.
 
 ### Typography — decided 2026-08-19
 
@@ -510,7 +528,8 @@ No mapping can be populated yet — there is no CSS variable, no component file,
 | --- | --- | --- |
 | ~~Platform: TypeScript + Next.js, PostgreSQL, long-running Node, Thailand VPS~~ — superseded, see next row | See archived [ADR-01](docs/00-archived/20260802-01-adr-platform-stack.md) for the original reasoning | 2026-08-02 |
 | Platform (current): React + Next.js (TypeScript) frontend, separate Go backend (Gin, gorilla/websocket, sqlc/pgx), PostgreSQL, Thailand VPS | User specified Go for the backend; ADR-01 archived and replaced — see [ADR-03](docs/02-design/02-technical/20260824-04-adr-revise-backend-go.md) for full reasoning | 2026-08-24 |
-| No CSS/styling framework chosen yet | Deliberately deferred — not part of ADR-03's scope; needs its own decision | 2026-08-02 |
+| ~~No CSS/styling framework chosen yet~~ — decided, see next row | Deliberately deferred at the time — not part of ADR-01/ADR-03's scope | 2026-08-02 |
+| CSS/styling framework: **Tailwind CSS**, tokens wired via `theme.extend` | Default Next.js App Router styling option with no client-boundary/runtime cost, and suits this project's many small structurally-similar components; same "widest docs, small-team-friendly" reasoning ADR-03 used for Gin/gorilla — see §2 for the full alternatives-considered table | 2026-08-24 |
 | Cookie consent: 3-category banner, reject-as-easy-as-accept, off-by-default | Legal requirement (PDPA), not a design preference — see `20260802-03` BR-1–5 | 2026-08-02 |
 | This document written mostly `TBD` rather than invented | No frontend code, brand, or visual asset exists to analyze; inventing values would misrepresent this as a settled system | 2026-08-02 |
 | Table vs Card: rule by data shape, not a single blanket pick — Table for uniform/admin rows (menu management, BL-001), Card for variable/glance-under-pressure content (barista queue, BL-005) | Two independent prototype audits (BL-001, BL-005) hit the identical undecided component — confirmed it was a system-level gap, not a per-feature one. A single fixed choice would have fit one screen and forced the other, since the barista queue's per-order content (multiple line items, options) doesn't sit in one table row the way a menu item does | 2026-08-19 |
