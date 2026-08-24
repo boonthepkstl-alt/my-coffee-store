@@ -306,7 +306,30 @@ it should render as checkboxes; noted as a fix rather than silently left.
 
 ### Data Display
 
-- **Table** — **Required** for staff/owner menu management (BL-001) and any future admin-style record list (order-status review, spec §3). ~~and the barista order queue (US-5, BL-005)~~ — **decided 2026-08-19: not for the barista queue**, see the Table-vs-Card rule below. Column layout, sort, and filter behavior: `TBD`.
+- **Table** — **Required** for staff/owner menu management (BL-001) and any future admin-style record list (order-status review, spec §3). ~~and the barista order queue (US-5, BL-005)~~ — **decided 2026-08-19: not for the barista queue**, see the Table-vs-Card rule below.
+
+  **Decided 2026-08-19:**
+
+  | Property | Value |
+  | --- | --- |
+  | Header | 12px, weight 600, uppercase, `0.02em` letter-spacing, `color.text.secondary`, `color.border` bottom rule separating it from the body |
+  | Row | `color.border` bottom rule between rows — **no zebra striping**, consistent with how Card also uses a border rather than an added surface tint (§ above) |
+  | Cell text | Table token, §2 Typography (15px/400) |
+  | Numeric columns (price, counts) | **Right-aligned**, `tabular-nums` — so a column of prices lines up on the decimal/units digit instead of ragging left |
+  | Action column | Right-most column, one action per row (e.g. "แก้ไข") — a row needing more than one action is a sign it should show a menu, not more inline buttons, but no spec has hit that case yet |
+  | Row hover | `color.background` tint (the page background color, reused — not a new token) — a plain visual cue for which row the pointer is over, independent of whether that row's action is visible |
+
+  **Sort: not implemented.** No spec asks for it, and the only table that
+  exists (menu management) is a small, hand-curated list — sorting a
+  10–30-row list a person built by hand doesn't solve a real problem yet.
+  Decide this when a table's row count or turnover actually makes unsorted
+  scanning slow, not ahead of that.
+
+  **Filter/Search: not implemented, same reasoning.** The most likely future
+  table to need it is "order-status review" (spec `20260802-01` §3, not yet
+  built) once it spans enough days/orders that browsing beats searching — but
+  that screen doesn't exist yet, so deciding its filter behavior now would be
+  designing for a screen nobody has specified.
 - **Card** — **Required** for the customer-facing menu item list (US-2) **and the barista order queue (US-5, BL-005) — decided 2026-08-19**, see the Table-vs-Card rule above for which screens use it.
 
   **Container decided 2026-08-19:** `color.surface` background, `color.border`
@@ -502,6 +525,7 @@ No mapping can be populated yet — there is no CSS variable, no component file,
 | Input: bordered container, always-visible label (never placeholder-as-label), same focus ring as Button | A placeholder that vanishes on typing isn't a label and would compound the accessibility gap this document already flags; consistent focus treatment matters more than per-component novelty | 2026-08-19 |
 | Select: button-group/chip, not a native dropdown; sweetness level left open (discrete vs. percentage) | Every option set is small (2–5) in a mobile, one-handed, fast-ordering context already on record — a dropdown costs an extra tap-scroll-tap a visible chip row doesn't; sweetness wasn't decided because the spec doesn't say whether it's discrete or a slider-scale, and those need different controls | 2026-08-19 |
 | Card: bordered container, no added "tinted surface" tier just for layering | Matches how Table already separates rows (borders, not zebra striping) and Alert/Badge (flat, tint only for meaning); inventing a second surface tone to solve a layering problem that hasn't been observed on a real screen yet would be exactly the kind of ungrounded token Rule 1 exists to prevent | 2026-08-19 |
+| Table: header/row/numeric-alignment/hover styling decided; Sort and Filter deliberately left unimplemented | No spec asks for sort or filter, and the only table that exists (menu management) is a small hand-curated list where either would solve a problem nobody has yet; deciding them now would be designing ahead of a real screen, the same reasoning already applied to Shadows | 2026-08-19 |
 
 Update this table whenever a real design decision is made — including "we decided not to decide X yet."
 
