@@ -34,7 +34,7 @@ Positive (TC-1, TC-3), Permission (TC-2), Integration/Boundary (TC-4) —
 ## Test Environment
 
 `TBD` — ยังไม่มี environment จริง โปรเจกต์ยังไม่ได้ scaffold (ดู
-[[../../02-design/02-technical/20260802-01-adr-platform-stack|ADR-01]] และ
+[[../../02-design/02-technical/20260824-04-adr-revise-backend-go|ADR-03]] และ
 `CLAUDE.md` หัวข้อ "Current state") เมื่อ scaffold แล้วให้เติมส่วนนี้ด้วย
 environment จริง ไม่ใช่เดาไว้ล่วงหน้า
 

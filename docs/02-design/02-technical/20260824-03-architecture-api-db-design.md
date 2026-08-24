@@ -4,7 +4,7 @@ date: 2026-08-24
 updated: 2026-08-24
 status: ร่าง
 spec: ["[[../../01-requirements/01-spec/20260802-01-table-self-ordering|20260802-01]]", "[[../../01-requirements/01-spec/20260802-02-pdpa-it-compliance|20260802-02]]", "[[../../01-requirements/01-spec/20260802-03-cookie-consent-analytics|20260802-03]]"]
-adr: ["[[20260802-01-adr-platform-stack|ADR-01]]", "[[20260824-02-adr-payment-gateway|ADR-02]]"]
+adr: ["[[../../00-archived/20260802-01-adr-platform-stack|ADR-01 (archived)]]", "[[20260824-02-adr-payment-gateway|ADR-02]]", "[[20260824-04-adr-revise-backend-go|ADR-03]]"]
 related: []
 supersedes: []
 ---
@@ -15,6 +15,13 @@ supersedes: []
 > เครื่องหมาย `[สมมติฐาน]` (Q1: ระดับข้อมูลส่วนบุคคลที่เก็บ, Q3: ระยะเวลาเก็บ
 > ข้อมูลออร์เดอร์) ถูกออกแบบบนสมมติฐานปัจจุบันเท่านั้น และทำเครื่องหมายไว้ทุกจุด
 > ที่เกี่ยวข้อง — **ห้ามพัฒนาส่วนเหล่านั้นจนกว่าจะยืนยัน**
+>
+> 🔁 **อัปเดต 2026-08-24:** [[../../00-archived/20260802-01-adr-platform-stack|ADR-01]]
+> ถูกแทนที่โดย [[20260824-04-adr-revise-backend-go|ADR-03]] — backend เปลี่ยนจาก
+> Next.js/Node.js รวมเป็นก้อนเดียว ไปเป็น **Go** แยกเป็นบริการอิสระ (frontend
+> ยังเป็น React/Next.js เหมือนเดิม) §2 และ §3 ด้านล่างแก้ไขให้ตรงกับ ADR-03 แล้ว
+> ส่วน database schema, API contract, workflow และ traceability ในเอกสารนี้
+> ไม่กระทบ เพราะไม่ผูกกับภาษา backend
 
 ## 1. ขอบเขตของเอกสารนี้
 
@@ -26,8 +33,9 @@ supersedes: []
 กระบวนการแจ้งเหตุละเมิดข้อมูลภายใน 72 ชั่วโมง (องค์กร ไม่ใช่ระบบ), เนื้อหา
 นโยบายความเป็นส่วนตัว/คุกกี้ (คอนเทนต์ ไม่ใช่โค้ด)
 
-อ้างอิงจาก: [[20260802-01-adr-platform-stack|ADR-01]] (TypeScript/Next.js,
-Node.js long-running, PostgreSQL, VPS ไทย) และ
+อ้างอิงจาก: [[20260824-04-adr-revise-backend-go|ADR-03]] (React/Next.js
+frontend, Go backend แยกบริการ, PostgreSQL, VPS ไทย — แทนที่
+[[../../00-archived/20260802-01-adr-platform-stack|ADR-01]]) และ
 [[20260824-02-adr-payment-gateway|ADR-02]] (PromptPay QR ผ่าน gateway ไทย)
 
 สถานะสเปคต้นทาง ณ เวลาที่ออกแบบ: ทั้งสามฉบับ `ร่าง` — `01` ไม่มีคำถามค้างที่
@@ -45,9 +53,9 @@ flowchart LR
   subgraph client_staff[จอบาริสต้า/พนักงาน]
     staffui[Next.js — คิวออร์เดอร์/จัดการเมนู]
   end
-  subgraph server[Node.js long-running — VPS ไทย]
-    api[REST API]
-    ws[WebSocket server]
+  subgraph server[Go backend — VPS ไทย]
+    api[REST API — Gin]
+    ws[WebSocket server — gorilla/websocket]
     worker[Retention/cleanup job — ตาม cron]
   end
   db[(PostgreSQL)]
@@ -67,15 +75,21 @@ flowchart LR
   worker --> db
 ```
 
-องค์ประกอบเดียว (Node.js process) รัน REST API และ WebSocket server ร่วมกัน —
-เป็นเหตุผลหลักที่ ADR-01 เลือก long-running runtime ไม่ใช่ serverless
-(AC-4 ของ `01` ต้องการ push ภายใน 5 วินาที)
+องค์ประกอบเดียว (Go process) รัน REST API และ WebSocket server ร่วมกัน —
+เป็นเหตุผลหลักที่ ADR-03 (เดิม ADR-01) เลือก long-running runtime ไม่ใช่
+serverless (AC-4 ของ `01` ต้องการ push ภายใน 5 วินาที) การแยก frontend
+(Next.js) กับ backend (Go) เป็นสองโปรเซสไม่กระทบข้อนี้ เพราะทั้ง REST API
+และ WebSocket ยังอยู่ในโปรเซส Go เดียวกัน
 
 ## 3. เทคโนโลยีที่ใช้
 
 | ส่วน | เลือกใช้ | เหตุผลสั้น ๆ | ADR |
 | --- | --- | --- | --- |
-| Frontend/Backend/DB/Hosting | ตามที่ตัดสินใจแล้ว | — | [[20260802-01-adr-platform-stack|ADR-01]] |
+| Frontend | React + Next.js (TypeScript) | ตามที่ตัดสินใจแล้ว | [[20260824-04-adr-revise-backend-go|ADR-03]] |
+| Backend | Go, web framework Gin | เลือกเพราะ community/docs ใหญ่ที่สุดในกลุ่มที่พิจารณา | [[20260824-04-adr-revise-backend-go|ADR-03]] |
+| WebSocket library | gorilla/websocket | เอกสารครอบคลุมที่สุด แม้อยู่ใน maintenance mode | [[20260824-04-adr-revise-backend-go|ADR-03]] |
+| DB access layer | sqlc + pgx | สร้างโค้ด Go type-safe จาก SQL DDL ตรง ๆ โดยไม่ต้องมี ORM คั่นกลาง | [[20260824-04-adr-revise-backend-go|ADR-03]] |
+| DB / Hosting | PostgreSQL, VPS ไทย (2 โปรเซส: frontend + backend) | ไม่เปลี่ยนจาก ADR-01 เดิม | [[20260824-04-adr-revise-backend-go|ADR-03]] |
 | Payment | PromptPay QR ผ่าน gateway ไทย | ต้องมี webhook เพื่อวัด AC-4 ได้จริง | [[20260824-02-adr-payment-gateway|ADR-02]] |
 | Object storage (รูปเมนู) | S3-compatible | ผู้ใช้ยืนยันแล้ว — ไม่ใช่ข้อมูลส่วนบุคคล จึงไม่ติดข้อจำกัดเรื่องพื้นที่ตั้งเซิร์ฟเวอร์แบบเดียวกับข้อมูลลูกค้า | เอกสารนี้ (ไม่แยก ADR เพราะขอบเขตผลกระทบเล็กกว่า payment) |
 | Password hashing | Argon2id | มาตรฐานปัจจุบันที่แนะนำเหนือ bcrypt สำหรับรหัสผ่านใหม่ — เป็นค่าเริ่มต้นทางเทคนิคที่ตัดสินใจได้โดยไม่ต้องรอธุรกิจ ต่างจาก payment/storage ที่มีผลทางพาณิชย์ | — |
@@ -400,8 +414,9 @@ schema ระดับใหญ่ ไม่ใช่แค่เพิ่มค
 
 ## 10. เอกสารอ้างอิง
 
-- [[20260802-01-adr-platform-stack|ADR-01]]
+- [[../../00-archived/20260802-01-adr-platform-stack|ADR-01 (archived)]]
 - [[20260824-02-adr-payment-gateway|ADR-02]]
+- [[20260824-04-adr-revise-backend-go|ADR-03]] — แพลตฟอร์มปัจจุบัน (Go backend)
 - [[../../01-requirements/01-spec/20260802-01-table-self-ordering|20260802-01]]
 - [[../../01-requirements/01-spec/20260802-02-pdpa-it-compliance|20260802-02]]
 - [[../../01-requirements/01-spec/20260802-03-cookie-consent-analytics|20260802-03]]

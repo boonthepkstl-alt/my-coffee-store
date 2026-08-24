@@ -179,7 +179,8 @@ supersedes: []
 
 - [[20260802-02-pdpa-it-compliance|20260802-02]] — ข้อกำหนด PDPA ภาพรวม (เอกสารแม่ของเรื่องนี้)
 - [[20260802-01-table-self-ordering|20260802-01]] — ระบบรับออร์เดอร์ด้วยตนเองจากโต๊ะ
-- [[../../02-design/02-technical/20260802-01-adr-platform-stack|ADR-01]] — เลือกแพลตฟอร์มหลัก (`ยอมรับแล้ว`)
+- [[../../00-archived/20260802-01-adr-platform-stack|ADR-01]] — เลือกแพลตฟอร์มหลัก (`ถูกแทนที่` — ดู ADR-03)
+- [[../../02-design/02-technical/20260824-04-adr-revise-backend-go|ADR-03]] — แก้ไขแพลตฟอร์มหลัก: backend เป็น Go (`ยอมรับแล้ว`)
 - [[../../02-design/02-technical/20260824-03-architecture-api-db-design|เอกสารออกแบบ]] — สถาปัตยกรรม, API, Database schema
 - [[../index|01-requirements]]
 - [[../../05-log/index|05-log]]

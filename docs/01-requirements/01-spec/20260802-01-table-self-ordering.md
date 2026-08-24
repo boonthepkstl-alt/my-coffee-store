@@ -162,7 +162,8 @@ supersedes: []
 
 - [[20260802-02-pdpa-it-compliance|20260802-02]] — ข้อกำหนด PDPA และกฎหมาย IT ที่ใช้ควบคู่กับระบบนี้
 - [[20260802-03-cookie-consent-analytics|20260802-03]] — ความยินยอมสำหรับคุกกี้และการวิเคราะห์การใช้งาน
-- [[../../02-design/02-technical/20260802-01-adr-platform-stack|ADR-01]] — เลือกแพลตฟอร์มหลัก (`ยอมรับแล้ว`)
+- [[../../00-archived/20260802-01-adr-platform-stack|ADR-01]] — เลือกแพลตฟอร์มหลัก (`ถูกแทนที่` — ดู ADR-03)
+- [[../../02-design/02-technical/20260824-04-adr-revise-backend-go|ADR-03]] — แก้ไขแพลตฟอร์มหลัก: backend เป็น Go (`ยอมรับแล้ว`)
 - [[../../02-design/01-prototypes/20260819-01-menu-management-journey|Journey: จัดการเมนู]] — User Journey ของ BL-001
 - [[../../02-design/01-prototypes/20260819-02-menu-management-prototype|Prototype: จัดการเมนู]] — Prototype Specification ของ BL-001
 - [[../../02-design/01-prototypes/20260819-03-barista-order-screen-journey|Journey: หน้าจอบาริสต้า]] — User Journey ของ BL-005

@@ -1,18 +1,26 @@
 ---
 title: เลือกแพลตฟอร์มหลักของระบบ
 date: 2026-08-02
-status: ยอมรับแล้ว
+status: ถูกแทนที่
 accepted: 2026-08-02
-spec: ["[[../../01-requirements/01-spec/20260802-01-table-self-ordering|20260802-01]]", "[[../../01-requirements/01-spec/20260802-02-pdpa-it-compliance|20260802-02]]", "[[../../01-requirements/01-spec/20260802-03-cookie-consent-analytics|20260802-03]]"]
+superseded: 2026-08-24
+spec: ["[[../01-requirements/01-spec/20260802-01-table-self-ordering|20260802-01]]", "[[../01-requirements/01-spec/20260802-02-pdpa-it-compliance|20260802-02]]", "[[../01-requirements/01-spec/20260802-03-cookie-consent-analytics|20260802-03]]"]
 related: []
 supersedes: []
+superseded_by: ["[[../02-design/02-technical/20260824-04-adr-revise-backend-go|ADR-03]]"]
 ---
 
 # ADR-01 — เลือกแพลตฟอร์มหลักของระบบ
 
-> ✅ **สถานะ `ยอมรับแล้ว` (2026-08-02)** — ผู้ใช้ยืนยันตัวเลือกทั้งสี่ตามที่เสนอไว้
+> 🗄️ **สถานะ `ถูกแทนที่` (2026-08-24)** — ย้ายมาที่ `00-archived/` ตามกฎ
+> never-delete ของ repo ถูกแทนที่ด้วย
+> [[../02-design/02-technical/20260824-04-adr-revise-backend-go|ADR-03]] ซึ่ง
+> เปลี่ยน backend จาก Next.js/Node.js เป็น Go แยกบริการ — **ห้ามอ้างอิงเอกสาร
+> นี้เป็นสถาปัตยกรรมปัจจุบันอีกต่อไป** เก็บไว้เพื่อรักษาประวัติการตัดสินใจเท่านั้น
+>
+> ~~✅ สถานะ `ยอมรับแล้ว` (2026-08-02) — ผู้ใช้ยืนยันตัวเลือกทั้งสี่ตามที่เสนอไว้
 > (TypeScript + Next.js / Node.js long-running / PostgreSQL / VPS ในประเทศไทย)
-> เขียนโค้ดอ้างอิงเอกสารนี้ได้แล้ว
+> เขียนโค้ดอ้างอิงเอกสารนี้ได้แล้ว~~
 
 > **หมายเหตุเรื่องขอบเขตของ ADR นี้**
 > เทมเพลต ADR ของโปรเจกต์กำหนดว่า 1 เอกสาร = 1 การตัดสินใจ เอกสารนี้รวม framework,
@@ -147,18 +155,18 @@ supersedes: []
 - [x] ~~เพิ่มคำสั่ง build / lint / test ลง `CLAUDE.md`~~ — ทำแล้ว 2026-08-02
       (คำสั่งจริงยังรอ `npm create next-app` ครั้งแรก ดูหมายเหตุใน CLAUDE.md)
 - [x] ~~เขียน ADR-02 เลือกผู้ให้บริการชำระเงิน~~ — ทำแล้ว 2026-08-24 ดู
-      [[20260824-02-adr-payment-gateway|ADR-02]]
+      [[../02-design/02-technical/20260824-02-adr-payment-gateway|ADR-02]]
 - [x] ~~เขียนเอกสารออกแบบ schema และ API ต่อจาก ADR นี้~~ — ทำแล้ว 2026-08-24 ดู
-      [[20260824-03-architecture-api-db-design|เอกสารออกแบบ]] (มีส่วนที่ยัง
+      [[../02-design/02-technical/20260824-03-architecture-api-db-design|เอกสารออกแบบ]] (มีส่วนที่ยัง
       `[สมมติฐาน]` รอ Q1/Q3 ของสเปค `02`)
 - [ ] เพิ่มงานด้าน infrastructure ลง backlog ผ่าน `requirement-to-backlog` — การดูแลเซิร์ฟเวอร์
       backup และ monitoring ยังไม่มีอยู่ในสเปคใดเลย ซึ่งเป็นช่องว่างที่ ADR นี้ทำให้เห็น
 
 ## เอกสารอ้างอิง
 
-- [[../../01-requirements/01-spec/20260802-01-table-self-ordering|20260802-01]] — ระบบรับออร์เดอร์ด้วยตนเองจากโต๊ะ
-- [[../../01-requirements/01-spec/20260802-02-pdpa-it-compliance|20260802-02]] — PDPA และกฎหมาย IT
-- [[../../01-requirements/01-spec/20260802-03-cookie-consent-analytics|20260802-03]] — คุกกี้และการวิเคราะห์การใช้งาน
-- [[20260824-02-adr-payment-gateway|ADR-02]] — เลือกผู้ให้บริการชำระเงิน
-- [[20260824-03-architecture-api-db-design|เอกสารออกแบบ]] — สถาปัตยกรรม, API, Database schema
-- [[../../05-log/index|05-log]]
+- [[../01-requirements/01-spec/20260802-01-table-self-ordering|20260802-01]] — ระบบรับออร์เดอร์ด้วยตนเองจากโต๊ะ
+- [[../01-requirements/01-spec/20260802-02-pdpa-it-compliance|20260802-02]] — PDPA และกฎหมาย IT
+- [[../01-requirements/01-spec/20260802-03-cookie-consent-analytics|20260802-03]] — คุกกี้และการวิเคราะห์การใช้งาน
+- [[../02-design/02-technical/20260824-02-adr-payment-gateway|ADR-02]] — เลือกผู้ให้บริการชำระเงิน
+- [[../02-design/02-technical/20260824-03-architecture-api-db-design|เอกสารออกแบบ]] — สถาปัตยกรรม, API, Database schema
+- [[../05-log/index|05-log]]

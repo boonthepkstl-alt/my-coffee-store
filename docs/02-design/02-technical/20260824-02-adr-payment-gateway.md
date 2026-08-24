@@ -4,7 +4,7 @@ date: 2026-08-24
 status: ยอมรับแล้ว
 accepted: 2026-08-24
 spec: ["[[../../01-requirements/01-spec/20260802-01-table-self-ordering|20260802-01]]"]
-related: ["[[20260802-01-adr-platform-stack|ADR-01]]"]
+related: ["[[../../00-archived/20260802-01-adr-platform-stack|ADR-01 (archived)]]", "[[20260824-04-adr-revise-backend-go|ADR-03]]"]
 supersedes: []
 ---
 
@@ -79,5 +79,6 @@ PromptPay — ADR-01 ทิ้งไว้เป็นงานต่อเน�
 ## เอกสารอ้างอิง
 
 - [[../../01-requirements/01-spec/20260802-01-table-self-ordering|20260802-01]]
-- [[20260802-01-adr-platform-stack|ADR-01]]
+- [[../../00-archived/20260802-01-adr-platform-stack|ADR-01 (archived)]] — เอกสารเดิม ถูกแทนที่โดย ADR-03
+- [[20260824-04-adr-revise-backend-go|ADR-03]] — แพลตฟอร์มปัจจุบัน (Go backend)
 - [[../../05-log/index|05-log]]
